@@ -144,4 +144,17 @@ WHERE g.guest_id NOT IN (
 	SELECT guest_id
     FROM bookings
 );
+
 -- Tìm phòng được đặt nhiều lần nhất
+SELECT r.room_id, r.room_type, COUNT(b.booking_id) 'Số lần đặt'
+FROM bookings b
+JOIN rooms r ON r.room_id = b.room_id
+GROUP BY r.room_id, r.room_type
+HAVING COUNT(b.booking_id) = (
+    SELECT MAX(so_lan)
+    FROM (
+        SELECT COUNT(booking_id) AS so_lan
+        FROM bookings
+        GROUP BY room_id
+    ) sub
+);
