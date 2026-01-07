@@ -130,16 +130,11 @@ ORDER BY COUNT(b.room_id) DESC LIMIT 1;
 
 -- Phần 3
 -- Hiển thị những phòng có giá thuê cao hơn giá trung bình của tất cả các phòng
-SELECT room_id,room_type,price_per_day
+SELECT room_id, room_type, price_per_day
 FROM rooms
 WHERE price_per_day > (
-	SELECT AVG(Sum)
-	FROM (
-		SELECT SUM(DATEDIFF(b.check_out,b.check_in) * r.price_per_day) 'Sum'
-		FROM bookings b
-		JOIN rooms r ON r.room_id = b.room_id
-		GROUP BY r.room_id
-	) sub
+    SELECT AVG(price_per_day)
+    FROM rooms
 );
 
 -- Hiển thị những khách chưa từng đặt phòng
@@ -150,4 +145,3 @@ WHERE g.guest_id NOT IN (
     FROM bookings
 );
 -- Tìm phòng được đặt nhiều lần nhất
-
